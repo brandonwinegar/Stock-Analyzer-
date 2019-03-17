@@ -1,4 +1,7 @@
+#!/usr/bin/python3
 from SimpleGui import *
+import argparse
+import daemon
 
 func = 'function=TIME_SERIES_DAILY'
 symbol = 'symbol=MSFT'
@@ -7,6 +10,10 @@ base_url = 'https://www.alphavantage.co/query?'
 # response = requests.get("http://api.open-notify.org/iss-now.json")
 # Alpha Vantage key: XW4JRNJTHUYZ8HJC
 
+def get_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--daemon", action="store_true")
+    return parser.parse_args()
 
 def main():
     # Gets a response form the requested URL, stores in Response Object
@@ -27,6 +34,12 @@ def main():
 if __name__ == "__main__":
     # main demonstrates some json stuff
     # main()
-    my_gui = SimpleGui()
+    args = get_args()
+    if args.daemon:
+        print("daemonized")
+        with daemon.DaemonContext():
+            SimpleGui()
+    else:
+        SimpleGui()
 
 
